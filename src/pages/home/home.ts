@@ -59,6 +59,7 @@ export class HomePage {
   onSeekState: boolean;
   currentFile: any = {};
   displayFooter: string = "inactive";
+  loggedIn: Boolean;
   @ViewChild(Navbar) navBar: Navbar;
   @ViewChild(Content) content: Content;
   constructor(
@@ -69,7 +70,14 @@ export class HomePage {
     public cloudProvider: CloudProvider,
     private store: Store<any>,
     public auth: AuthService
-  ) {}
+  ) {
+    this.auth.isLoggedIn$.subscribe((isLoggedIn: any) => {
+      this.loggedIn = isLoggedIn;
+      if (isLoggedIn) {
+        this.getDocuments();
+      }
+    });
+  }
 
   getDocuments() {
     let loader = this.presentLoading();
@@ -86,7 +94,6 @@ export class HomePage {
     this.auth
       .login()
       .then(() => {
-        this.getDocuments();
         console.log("Successful Login");
       })
       .catch(error => {
@@ -95,11 +102,6 @@ export class HomePage {
   }
 
   ionViewWillLoad() {
-    // Already Authenticated
-    if (this.auth.loggedIn) {
-      this.getDocuments();
-    }
-
     // Listening to Store events and update the state
     this.store.select("appState").subscribe((value: any) => {
       this.state = value.media;
@@ -124,7 +126,7 @@ export class HomePage {
         distinctUntilChanged()
       )
       .subscribe((value: any) => {
-        this.seekbar.setValue(Number.parseInt(value));
+        this.seekbar.setValue(value);
       });
   }
 
