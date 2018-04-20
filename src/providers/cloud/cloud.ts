@@ -1,9 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs/Subject";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/filter";
-import "rxjs/add/operator/do";
-import { Observable } from "rxjs/Observable";
+import { map } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable()
@@ -12,6 +8,6 @@ export class CloudProvider {
   constructor(private http: HttpClient) {}
   getFiles() {
     const url = `${this.url}/media`;
-    return this.http.get(url).map((data: any) => data.apiResponse.items);
+    return this.http.get(url).pipe(map((data: any) => data.apiResponse.items));
   }
 }

@@ -77,17 +77,18 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
-    <plugin name="cordova-plugin-device" spec="^2.0.1" />
-    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
-    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova-plugin-safariviewcontroller" spec="^1.5.3" />
+    <allow-navigation href="http://10.158.8.68:8100" />
+    <engine name="android" spec="^6.2.3" />
+    <engine name="ios" spec="4.5.4" />
     <plugin name="cordova-plugin-customurlscheme" spec="^4.3.0">
         <variable name="URL_SCHEME" value="com.inders.audioplayer" />
         <variable name="ANDROID_SCHEME" value="com.inders.audioplayer" />
         <variable name="ANDROID_HOST" value="imtest.auth0.com" />
         <variable name="ANDROID_PATHPREFIX" value="/cordova/com.inders.audioplayer/callback" />
     </plugin>
-    <engine name="ios" spec="~4.5.4" />
-    <allow-navigation href="http://10.158.8.68:8100" />
+    <plugin name="cordova-plugin-device" spec="^2.0.2" />
+    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
+    <plugin name="cordova-plugin-safariviewcontroller" spec="^1.5.3" />
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
 </widget>

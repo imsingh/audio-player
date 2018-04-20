@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs/Subject";
-import "rxjs/add/operator/map";
+import { takeUntil } from "rxjs/operators";
 import { Observable } from "rxjs/Observable";
-import * as moment from 'moment';
+import * as moment from "moment";
 
 @Injectable()
 export class AudioProvider {
@@ -12,7 +12,7 @@ export class AudioProvider {
   constructor() {}
 
   playStream(url) {
-    return this.streamObservable(url).takeUntil(this.stop$);
+    return this.streamObservable(url).pipe(takeUntil(this.stop$));
   }
 
   stop() {

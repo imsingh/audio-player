@@ -5,7 +5,7 @@ import {
   style,
   animate,
   transition
-} from '@angular/animations';
+} from "@angular/animations";
 
 import {
   NavController,
@@ -28,21 +28,27 @@ import {
 import { Store } from "@ngrx/store";
 import { CloudProvider } from "../../providers/cloud/cloud";
 import { AuthService } from "../..//providers/auth0/auth.service";
-import { pluck, filter, map, distinctUntilChanged, first } from 'rxjs/operators';
+import { pluck, filter, map, distinctUntilChanged } from "rxjs/operators";
 
 @Component({
   selector: "page-home",
   templateUrl: "home.html",
   animations: [
-    trigger('showHide', [
-     state('active', style({
-      opacity: 1,
-     })),
-     state('inactive', style({
-      opacity: 0,
-     })),
-     transition('inactive => active', animate('250ms ease-in')),
-     transition('active => inactive', animate('250ms ease-out')),
+    trigger("showHide", [
+      state(
+        "active",
+        style({
+          opacity: 1
+        })
+      ),
+      state(
+        "inactive",
+        style({
+          opacity: 0
+        })
+      ),
+      transition("inactive => active", animate("250ms ease-in")),
+      transition("active => inactive", animate("250ms ease-out"))
     ])
   ]
 })
@@ -50,9 +56,9 @@ export class HomePage {
   files: any = [];
   seekbar: FormControl = new FormControl("seekbar");
   state: any = {};
-  onSeekState:boolean;
-  currentFile:any = {};
-  displayFooter: string = 'inactive';
+  onSeekState: boolean;
+  currentFile: any = {};
+  displayFooter: string = "inactive";
   @ViewChild(Navbar) navBar: Navbar;
   @ViewChild(Content) content: Content;
   constructor(
@@ -97,26 +103,26 @@ export class HomePage {
     });
 
     // Resize the Content Screen so that Ionic is aware of footer
-    this.store.select("appState")
-    .pipe(
-      pluck('media', 'canplay'),
-      filter(value => value === true),
-    )
-    .subscribe(value => {
-      this.displayFooter = 'active';
-      this.content.resize();
-    });
+    this.store
+      .select("appState")
+      .pipe(pluck("media", "canplay"), filter(value => value === true))
+      .subscribe(value => {
+        this.displayFooter = "active";
+        this.content.resize();
+      });
 
     // Updating the Seekbar based on currentTime
-    this.store.select("appState")
-    .pipe(
-      pluck('media', 'timeSec'), 
-      filter(value => value !== undefined),
-      map((value:any) => Number.parseInt(value)),
-      distinctUntilChanged())
-    .subscribe((value:any) => {
-      this.seekbar.setValue(Number.parseInt(value));
-    });
+    this.store
+      .select("appState")
+      .pipe(
+        pluck("media", "timeSec"),
+        filter(value => value !== undefined),
+        map((value: any) => Number.parseInt(value)),
+        distinctUntilChanged()
+      )
+      .subscribe((value: any) => {
+        this.seekbar.setValue(Number.parseInt(value));
+      });
   }
 
   openFile(file, index) {
@@ -137,7 +143,10 @@ export class HomePage {
           payload: {
             value: true,
             data: {
-              time: this.audioProvider.formatTime(audioObj.duration * 1000, "HH:mm:ss"),
+              time: this.audioProvider.formatTime(
+                audioObj.duration * 1000,
+                "HH:mm:ss"
+              ),
               timeSec: audioObj.duration,
               mediaType: "mp3"
             }
@@ -152,7 +161,10 @@ export class HomePage {
           type: TIMEUPDATE,
           payload: {
             timeSec: audioObj.currentTime,
-            time: this.audioProvider.formatTime(audioObj.currentTime * 1000, "HH:mm:ss")
+            time: this.audioProvider.formatTime(
+              audioObj.currentTime * 1000,
+              "HH:mm:ss"
+            )
           }
         });
       } else if (value.eventName === "loadstart") {
@@ -183,13 +195,13 @@ export class HomePage {
 
   onSeekStart() {
     this.onSeekState = this.state.playing;
-    if(this.onSeekState) {
+    if (this.onSeekState) {
       this.pause();
     }
   }
 
   onSeekEnd(event) {
-    if(this.onSeekState) {
+    if (this.onSeekState) {
       this.audioProvider.seekTo(event.value);
       this.play();
     } else {
@@ -230,6 +242,6 @@ export class HomePage {
   reset() {
     this.resetState();
     this.currentFile = {};
-    this.displayFooter = 'inactive';
+    this.displayFooter = "inactive";
   }
 }
