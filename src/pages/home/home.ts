@@ -74,26 +74,29 @@ export class HomePage {
   getDocuments() {
     let loader = this.presentLoading();
     this.cloudProvider.getFiles().subscribe(files => {
-      this.files = files.filter(file => file.contentType !== 'application/x-www-form-urlencoded;charset=UTF-8');
+      this.files = files.filter(
+        file =>
+          file.contentType !== "application/x-www-form-urlencoded;charset=UTF-8"
+      );
       loader.dismiss();
     });
   }
 
   login() {
-    this.auth.login()
-    .then(()=> {
-      this.getDocuments();
-      console.log('Successful Login')
-    })
-    .catch(error => {
-      console.log(error);
-    });
+    this.auth
+      .login()
+      .then(() => {
+        this.getDocuments();
+        console.log("Successful Login");
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   ionViewWillLoad() {
-
-    // Already Authenticated  
-    if(!this.auth.loggedIn) {
+    // Already Authenticated
+    if (this.auth.loggedIn) {
       this.getDocuments();
     }
 
