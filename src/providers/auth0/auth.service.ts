@@ -31,7 +31,8 @@ export class AuthService {
     const promise = new Promise((resolve, reject) => {
       this.loading = true;
       const options = {
-        scope: "openid profile offline_access"
+        scope: "openid profile offline_access",
+        audience: AUTH_CONFIG.audience
       };
       // Authorize login request with Auth0: open login page and get auth results
       this.Client.authorize(options, (err, authResult) => {
@@ -40,6 +41,8 @@ export class AuthService {
           reject(err);
         } else {
           // Set access token
+          console.log(authResult);
+          this.storage.set("id_token", authResult.idToken);
           this.storage.set("access_token", authResult.accessToken);
           this.accessToken = authResult.accessToken;
           // Set access token expiration
@@ -73,6 +76,7 @@ export class AuthService {
     this.storage.remove("profile");
     this.storage.remove("access_token");
     this.storage.remove("expires_at");
+    this.storage.remove("id_token");
     this.accessToken = null;
     this.user = null;
     this.loggedIn = false;
