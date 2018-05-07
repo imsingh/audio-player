@@ -32,34 +32,20 @@ export class AudioProvider {
 
   private streamObservable(url) {
     let events = [
-      "ended",
-      "error",
-      "play",
-      "playing",
-      "pause",
-      "timeupdate",
-      "canplay",
-      "loadedmetadata",
-      "loadstart"
+      "ended", "error", "play", "playing", "pause", "timeupdate", "canplay", "loadedmetadata", "loadstart"
     ];
-    let handlers = [];
-
-    let eventAdder = function(obj, events, observer) {
-      let handlers = [];
-      events.forEach(eventName => {
-        let handler = event => observer.next({ eventName, event });
-        obj.addEventListener(eventName, handler);
-        handlers.push({ eventName, handler });
-      });
-
-      return handlers;
-    };
-
-    let eventRemover = function(obj, handlers) {
-      handlers.forEach(event => {
-        obj.removeEventListener(event.eventName, event.handler);
+  
+    const addEvents = function(obj, events, handler) {
+      events.forEach(event => {
+        obj.addEventListener(event, handler);
       });
     };
+
+    const removeEvents = function(obj, events, handler) {
+      events.forEach(event => {
+        obj.removeEventListener(event, handler);
+      });
+    }
 
     return Observable.create(observer => {
       // Play audio
@@ -68,7 +54,8 @@ export class AudioProvider {
       this.audioObj.play();
 
       // Media Events
-      handlers = eventAdder(this.audioObj, events, observer);
+      const handler = (event) => observer.next({eventName: event.type ,event});
+      addEvents(this.audioObj, events, handler);
 
       return () => {
         // Stop Playing
@@ -76,7 +63,7 @@ export class AudioProvider {
         this.audioObj.currentTime = 0;
 
         // Remove EventListeners
-        eventRemover(this.audioObj, handlers);
+        removeEvents(this.audioObj, events, handler);
       };
     });
   }
