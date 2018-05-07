@@ -54,7 +54,7 @@ export class AudioProvider {
       this.audioObj.play();
 
       // Media Events
-      const handler = (event) => observer.next({eventName: event.type ,event});
+      const handler = (event) => observer.next(event);
       addEvents(this.audioObj, events, handler);
 
       return () => {

@@ -138,11 +138,11 @@ export class HomePage {
 
   playStream(url) {
     this.resetState();
-    this.audioProvider.playStream(url).subscribe(value => {
-      const audioObj = value.event.target;
-      if (value.eventName === "canplay") {
+    this.audioProvider.playStream(url).subscribe(event => {
+      const audioObj = event.target;
+      if (event.type === "canplay") {
         this.store.dispatch({ type: CANPLAY, payload: { value: true } });
-      } else if (value.eventName === "loadedmetadata") {
+      } else if (event.type === "loadedmetadata") {
         this.store.dispatch({
           type: LOADEDMETADATA,
           payload: {
@@ -157,11 +157,11 @@ export class HomePage {
             }
           }
         });
-      } else if (value.eventName === "playing") {
+      } else if (event.type === "playing") {
         this.store.dispatch({ type: PLAYING, payload: { value: true } });
-      } else if (value.eventName === "pause" || value.eventName === "ended") {
+      } else if (event.type === "pause" || event.type === "ended") {
         this.store.dispatch({ type: PLAYING, payload: { value: false } });
-      } else if (value.eventName === "timeupdate") {
+      } else if (event.type === "timeupdate") {
         this.store.dispatch({
           type: TIMEUPDATE,
           payload: {
@@ -172,7 +172,7 @@ export class HomePage {
             )
           }
         });
-      } else if (value.eventName === "loadstart") {
+      } else if (event.type === "loadstart") {
         this.store.dispatch({ type: LOADSTART, payload: { value: true } });
       }
     });
