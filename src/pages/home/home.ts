@@ -82,10 +82,7 @@ export class HomePage {
   getDocuments() {
     let loader = this.presentLoading();
     this.cloudProvider.getFiles().subscribe(files => {
-      this.files = files.filter(
-        file =>
-          file.contentType !== "application/x-www-form-urlencoded;charset=UTF-8"
-      );
+      this.files = files;
       loader.dismiss();
     });
   }

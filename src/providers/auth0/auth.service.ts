@@ -1,12 +1,12 @@
 // src/services/auth.service.ts
 import { Injectable, NgZone } from "@angular/core";
 import { Storage } from "@ionic/storage";
+import { Subject } from "rxjs";
 
 // Import AUTH_CONFIG, Auth0Cordova, and auth0.js
 import { AUTH_CONFIG } from "./auth.config";
 import Auth0Cordova from "@auth0/cordova";
 import * as auth0 from "auth0-js";
-import { Subject } from "rxjs/Subject";
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
   Client = new Auth0Cordova(AUTH_CONFIG);
   accessToken: string;
   user: any;
-  private loggedIn: boolean;
+  loggedIn: boolean;
   loading = true;
   isLoggedIn$ = new Subject();
   constructor(public zone: NgZone, private storage: Storage) {
