@@ -40,21 +40,22 @@ export class AuthService {
           this.loading = false;
           reject(err);
         } else {
-          // Set access token
-          console.log(authResult);
-          this.storage.set("id_token", authResult.idToken);
-          this.storage.set("access_token", authResult.accessToken);
+          // Set access token & id token
+          this.storage.set("id_token", authResult.idToken)
+          this.storage.set("access_token", authResult.accessToken)
+          .then(()=> {
+            // Set logged in
+            this.loading = false;
+            this.loggedIn = true;
+            this.isLoggedIn$.next(this.loggedIn);
+            resolve();
+          });
           this.accessToken = authResult.accessToken;
           // Set access token expiration
           const expiresAt = JSON.stringify(
             authResult.expiresIn * 1000 + new Date().getTime()
           );
           this.storage.set("expires_at", expiresAt);
-          // Set logged in
-          this.loading = false;
-          this.loggedIn = true;
-          this.isLoggedIn$.next(this.loggedIn);
-
           // Fetch user's profile info
           this.Auth0.client.userInfo(this.accessToken, (err, profile) => {
             if (err) {
@@ -63,7 +64,6 @@ export class AuthService {
             this.storage
               .set("profile", profile)
               .then(val => this.zone.run(() => (this.user = profile)));
-            resolve();
           });
         }
       });
@@ -78,7 +78,7 @@ export class AuthService {
     this.storage.remove("expires_at");
     this.storage.remove("id_token");
     this.accessToken = null;
-    this.user = null;
+    this.user = {};
     this.loggedIn = false;
     this.isLoggedIn$.next(this.loggedIn);
   }
