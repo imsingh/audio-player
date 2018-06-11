@@ -11,9 +11,12 @@ export class CloudProvider {
     const url = `${this.url}/media`;
     return this.http.get(url)
       .pipe(
-        map((data: any) => { 
+        map((data: any) => {
           return data.apiResponse.items.filter(file => {
             return file.contentType !== "application/x-www-form-urlencoded;charset=UTF-8"
+          }).map(file => {
+            file.url = `https://storage.googleapis.com/${file.bucket}/${file.name}`;
+            return file;
           });
         })
       );

@@ -129,8 +129,7 @@ export class HomePage {
 
   openFile(file, index) {
     this.currentFile = { index, file };
-    let url = `https://storage.googleapis.com/${file.bucket}/${file.name}`;
-    this.playStream(url);
+    this.playStream(file.url);
   }
 
   playStream(url) {
